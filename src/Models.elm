@@ -17,8 +17,10 @@ type alias Model =
   { items : List Item
   , message : String
   , loading : Bool
+  , now : Maybe Date
   }
 
 type Msg
   = FetchSucceed (List Item)
   | FetchFail Http.Error
+  | DateSucceed (Date)

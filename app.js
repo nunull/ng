@@ -8757,22 +8757,25 @@ var _mgold$elm_date_format$Date_Format$format = F2(
 	});
 var _mgold$elm_date_format$Date_Format$formatISO8601 = _mgold$elm_date_format$Date_Format$format('%Y-%m-%dT%H:%M:%SZ');
 
-var _user$project$Models$Item = F6(
+var _nunull$ng$Models$Item = F6(
 	function (a, b, c, d, e, f) {
 		return {name: a, url: b, commentsUrl: c, date: d, source: e, channel: f};
 	});
-var _user$project$Models$Model = F3(
-	function (a, b, c) {
-		return {items: a, message: b, loading: c};
+var _nunull$ng$Models$Model = F4(
+	function (a, b, c, d) {
+		return {items: a, message: b, loading: c, now: d};
 	});
-var _user$project$Models$FetchFail = function (a) {
+var _nunull$ng$Models$DateSucceed = function (a) {
+	return {ctor: 'DateSucceed', _0: a};
+};
+var _nunull$ng$Models$FetchFail = function (a) {
 	return {ctor: 'FetchFail', _0: a};
 };
-var _user$project$Models$FetchSucceed = function (a) {
+var _nunull$ng$Models$FetchSucceed = function (a) {
 	return {ctor: 'FetchSucceed', _0: a};
 };
 
-var _user$project$Network$getErrorMessage = function (error) {
+var _nunull$ng$Network$getErrorMessage = function (error) {
 	var _p0 = error;
 	if (_p0.ctor === 'UnexpectedPayload') {
 		return _p0._0;
@@ -8780,17 +8783,17 @@ var _user$project$Network$getErrorMessage = function (error) {
 		return 'Uknown error';
 	}
 };
-var _user$project$Network$fetch = F2(
+var _nunull$ng$Network$fetch = F2(
 	function (url, decode) {
 		return A3(
 			_elm_lang$core$Task$perform,
-			_user$project$Models$FetchFail,
-			_user$project$Models$FetchSucceed,
+			_nunull$ng$Models$FetchFail,
+			_nunull$ng$Models$FetchSucceed,
 			A2(_evancz$elm_http$Http$get, decode, url));
 	});
-var _user$project$Network$fetchReddit = function (sub) {
+var _nunull$ng$Network$fetchReddit = function (sub) {
 	return A2(
-		_user$project$Network$fetch,
+		_nunull$ng$Network$fetch,
 		A2(
 			_elm_lang$core$Basics_ops['++'],
 			'https://www.reddit.com/r/',
@@ -8820,20 +8823,130 @@ var _user$project$Network$fetchReddit = function (sub) {
 						A2(_elm_lang$core$Json_Decode_ops[':='], 'title', _elm_lang$core$Json_Decode$string),
 						A2(_elm_lang$core$Json_Decode_ops[':='], 'url', _elm_lang$core$Json_Decode$string),
 						A2(_elm_lang$core$Json_Decode_ops[':='], 'permalink', _elm_lang$core$Json_Decode$string),
-						A2(_elm_lang$core$Json_Decode_ops[':='], 'created', _elm_lang$core$Json_Decode$float))))));
+						A2(_elm_lang$core$Json_Decode_ops[':='], 'created_utc', _elm_lang$core$Json_Decode$float))))));
 };
-var _user$project$Network$fetchAll = _elm_lang$core$Platform_Cmd$batch(
+var _nunull$ng$Network$fetchAll = _elm_lang$core$Platform_Cmd$batch(
 	_elm_lang$core$Native_List.fromArray(
 		[
-			_user$project$Network$fetchReddit('haskell'),
-			_user$project$Network$fetchReddit('elm')
+			_nunull$ng$Network$fetchReddit('haskell'),
+			_nunull$ng$Network$fetchReddit('elm'),
+			A3(_elm_lang$core$Task$perform, _nunull$ng$Models$DateSucceed, _nunull$ng$Models$DateSucceed, _elm_lang$core$Date$now)
 		]));
 
-var _user$project$ListView$subscriptions = function (model) {
+var _nunull$ng$ListView$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
-var _user$project$ListView$space = _elm_lang$html$Html$text(' ');
-var _user$project$ListView$displayUrl = function (url) {
+var _nunull$ng$ListView$space = _elm_lang$html$Html$text(' ');
+var _nunull$ng$ListView$monthToInt = function (month) {
+	var _p0 = month;
+	switch (_p0.ctor) {
+		case 'Jan':
+			return 1;
+		case 'Feb':
+			return 2;
+		case 'Mar':
+			return 3;
+		case 'Apr':
+			return 4;
+		case 'May':
+			return 5;
+		case 'Jun':
+			return 6;
+		case 'Jul':
+			return 7;
+		case 'Aug':
+			return 8;
+		case 'Sep':
+			return 9;
+		case 'Oct':
+			return 10;
+		case 'Nov':
+			return 11;
+		default:
+			return 12;
+	}
+};
+var _nunull$ng$ListView$displayDate = F2(
+	function (cur, date) {
+		var _p1 = cur;
+		if (_p1.ctor === 'Just') {
+			var names = _elm_lang$core$Native_List.fromArray(
+				['year', 'month', 'day', 'hour', 'minute', 'second']);
+			var fs = _elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$core$Date$year,
+					function (_p2) {
+					return _nunull$ng$ListView$monthToInt(
+						_elm_lang$core$Date$month(_p2));
+				},
+					_elm_lang$core$Date$day,
+					_elm_lang$core$Date$hour,
+					_elm_lang$core$Date$minute,
+					_elm_lang$core$Date$second
+				]);
+			var result = A2(
+				_elm_lang$core$Array$get,
+				0,
+				_elm_lang$core$Array$fromList(
+					A2(
+						_elm_lang$core$List$map,
+						_elm_lang$core$Basics$snd,
+						A2(
+							_elm_lang$core$List$filter,
+							function (pair) {
+								return !_elm_lang$core$Native_Utils.eq(
+									_elm_lang$core$Basics$fst(pair),
+									0);
+							},
+							A3(
+								_elm_lang$core$List$map2,
+								F2(
+									function (num, name) {
+										return {
+											ctor: '_Tuple2',
+											_0: num,
+											_1: A2(
+												_elm_lang$core$Basics_ops['++'],
+												_elm_lang$core$Basics$toString(num),
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													' ',
+													A2(
+														_elm_lang$core$Basics_ops['++'],
+														name,
+														(_elm_lang$core$Native_Utils.cmp(num, 1) > 0) ? 's' : '')))
+										};
+									}),
+								A3(
+									_elm_lang$core$List$map2,
+									F2(
+										function (x, y) {
+											return x - y;
+										}),
+									A2(
+										_elm_lang$core$List$map,
+										function (f) {
+											return f(_p1._0);
+										},
+										fs),
+									A2(
+										_elm_lang$core$List$map,
+										function (f) {
+											return f(date);
+										},
+										fs)),
+								names)))));
+			var _p3 = result;
+			if (_p3.ctor === 'Just') {
+				return _p3._0;
+			} else {
+				return 'now';
+			}
+		} else {
+			return '';
+		}
+	});
+var _nunull$ng$ListView$displayUrl = function (url) {
 	var pathSeperator = '/';
 	var protocolSeperator = '://';
 	return A2(
@@ -8853,96 +8966,84 @@ var _user$project$ListView$displayUrl = function (url) {
 						_elm_lang$core$List$tail(
 							A2(_elm_lang$core$String$split, protocolSeperator, url)))))));
 };
-var _user$project$ListView$viewItem = function (item) {
-	return A2(
-		_elm_lang$html$Html$li,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$h2,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$a,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$href(item.url),
-								_elm_lang$html$Html_Attributes$target('_blank')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html$text(
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									'(',
-									A2(
-										_elm_lang$core$Basics_ops['++'],
-										item.source,
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											'/',
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												item.channel,
-												A2(_elm_lang$core$Basics_ops['++'], ') ', item.name))))))
-							]))
-					])),
-				A2(
-				_elm_lang$html$Html$a,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$href(item.commentsUrl),
-						_elm_lang$html$Html_Attributes$target('_blank')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Comments')
-					])),
-				_user$project$ListView$space,
-				A2(
-				_elm_lang$html$Html$a,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$href(item.url),
-						_elm_lang$html$Html_Attributes$target('_blank')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text(
-						_user$project$ListView$displayUrl(item.url))
-					])),
-				_user$project$ListView$space,
-				A2(
-				_elm_lang$html$Html$time,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text(
-						A2(_mgold$elm_date_format$Date_Format$format, '%Y-%m-%d %H:%M', item.date))
-					])),
-				_user$project$ListView$space,
-				A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('source-channel')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text(
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							item.source,
-							A2(_elm_lang$core$Basics_ops['++'], '/', item.channel)))
-					]))
-			]));
-};
-var _user$project$ListView$view = function (model) {
+var _nunull$ng$ListView$viewItem = F2(
+	function (model, item) {
+		return A2(
+			_elm_lang$html$Html$li,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$h2,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$a,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$href(item.url),
+									_elm_lang$html$Html_Attributes$target('_blank')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text(item.name)
+								]))
+						])),
+					A2(
+					_elm_lang$html$Html$span,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('source-channel')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								item.source,
+								A2(_elm_lang$core$Basics_ops['++'], '/', item.channel)))
+						])),
+					_nunull$ng$ListView$space,
+					A2(
+					_elm_lang$html$Html$a,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$href(item.commentsUrl),
+							_elm_lang$html$Html_Attributes$target('_blank')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text('Comments')
+						])),
+					_nunull$ng$ListView$space,
+					A2(
+					_elm_lang$html$Html$a,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$href(item.url),
+							_elm_lang$html$Html_Attributes$target('_blank')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text(
+							_nunull$ng$ListView$displayUrl(item.url))
+						])),
+					_nunull$ng$ListView$space,
+					A2(
+					_elm_lang$html$Html$time,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text(
+							A2(_nunull$ng$ListView$displayDate, model.now, item.date))
+						]))
+				]));
+	});
+var _nunull$ng$ListView$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8970,7 +9071,9 @@ var _user$project$ListView$view = function (model) {
 						A2(
 						_elm_lang$html$Html$button,
 						_elm_lang$core$Native_List.fromArray(
-							[]),
+							[
+								_elm_lang$html$Html_Attributes$class('primary')
+							]),
 						_elm_lang$core$Native_List.fromArray(
 							[
 								_elm_lang$html$Html$text('Manage')
@@ -9008,7 +9111,7 @@ var _user$project$ListView$view = function (model) {
 					[]),
 				A2(
 					_elm_lang$core$List$map,
-					_user$project$ListView$viewItem,
+					_nunull$ng$ListView$viewItem(model),
 					_elm_lang$core$List$reverse(
 						A2(
 							_elm_lang$core$List$sortBy,
@@ -9019,53 +9122,65 @@ var _user$project$ListView$view = function (model) {
 							model.items))))
 			]));
 };
-var _user$project$ListView$update = F2(
+var _nunull$ng$ListView$update = F2(
 	function (msg, model) {
-		var _p0 = msg;
-		if (_p0.ctor === 'FetchSucceed') {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						items: A2(_elm_lang$core$List$append, model.items, _p0._0),
-						message: '',
-						loading: false
-					}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		} else {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						message: _user$project$Network$getErrorMessage(_p0._0),
-						loading: false
-					}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
+		var _p4 = msg;
+		switch (_p4.ctor) {
+			case 'FetchSucceed':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							items: A2(_elm_lang$core$List$append, model.items, _p4._0),
+							message: '',
+							loading: false
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'FetchFail':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							message: _nunull$ng$Network$getErrorMessage(_p4._0),
+							loading: false
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							now: _elm_lang$core$Maybe$Just(_p4._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
-var _user$project$ListView$init = {
+var _nunull$ng$ListView$init = {
 	ctor: '_Tuple2',
 	_0: {
 		items: _elm_lang$core$Native_List.fromArray(
 			[]),
 		message: '',
-		loading: true
+		loading: true,
+		now: _elm_lang$core$Maybe$Nothing
 	},
-	_1: _user$project$Network$fetchAll
+	_1: _nunull$ng$Network$fetchAll
 };
 
-var _user$project$NewsAggregator$main = {
+var _nunull$ng$NewsAggregator$main = {
 	main: _elm_lang$html$Html_App$program(
-		{init: _user$project$ListView$init, view: _user$project$ListView$view, update: _user$project$ListView$update, subscriptions: _user$project$ListView$subscriptions})
+		{init: _nunull$ng$ListView$init, view: _nunull$ng$ListView$view, update: _nunull$ng$ListView$update, subscriptions: _nunull$ng$ListView$subscriptions})
 };
 
 var Elm = {};
 Elm['NewsAggregator'] = Elm['NewsAggregator'] || {};
-_elm_lang$core$Native_Platform.addPublicModule(Elm['NewsAggregator'], 'NewsAggregator', typeof _user$project$NewsAggregator$main === 'undefined' ? null : _user$project$NewsAggregator$main);
+_elm_lang$core$Native_Platform.addPublicModule(Elm['NewsAggregator'], 'NewsAggregator', typeof _nunull$ng$NewsAggregator$main === 'undefined' ? null : _nunull$ng$NewsAggregator$main);
 
 if (typeof define === "function" && define['amd'])
 {

@@ -17,6 +17,7 @@ fetchAll : Cmd Msg
 fetchAll = batch
   [ fetchReddit "haskell"
   , fetchReddit "elm"
+  , perform DateSucceed DateSucceed Date.now
   ]
 
 fetchReddit : String -> Cmd Msg
@@ -36,7 +37,7 @@ fetchReddit sub = fetch ("https://www.reddit.com/r/" ++ sub ++ ".json")
      ("title"     := string)
      ("url"       := string)
      ("permalink" := string)
-     ("created"   := float)
+     ("created_utc"   := float)
 
 getErrorMessage : Error -> String
 getErrorMessage error = case error of
