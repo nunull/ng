@@ -11,7 +11,7 @@
   margin: 0 auto;
   padding: 10px;
 }
-header {
+header, footer {
   padding: 14px 0;
 }
 a:hover {
@@ -24,7 +24,7 @@ ul {
   padding: 0;
   list-style: none;
 }
-li {
+li, section {
   padding: 6px 0;
 }
 h2 {
@@ -76,6 +76,25 @@ button.primary {
   width: 8px;
   height: 24px;
   margin: -2px 0 0 6px;
+  background: white;
+}
+.dialog-container {
+  position: fixed;
+  display: none;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #222;
+}
+.dialog-container.active {
+  display: inline-block;
+}
+.dialog {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 2px;
   background: white;
 }
 .source-channel {

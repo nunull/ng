@@ -8202,6 +8202,107 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
+var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode_ops[':='], 'keyCode', _elm_lang$core$Json_Decode$int);
+var _elm_lang$html$Html_Events$targetChecked = A2(
+	_elm_lang$core$Json_Decode$at,
+	_elm_lang$core$Native_List.fromArray(
+		['target', 'checked']),
+	_elm_lang$core$Json_Decode$bool);
+var _elm_lang$html$Html_Events$targetValue = A2(
+	_elm_lang$core$Json_Decode$at,
+	_elm_lang$core$Native_List.fromArray(
+		['target', 'value']),
+	_elm_lang$core$Json_Decode$string);
+var _elm_lang$html$Html_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
+var _elm_lang$html$Html_Events$onWithOptions = _elm_lang$virtual_dom$VirtualDom$onWithOptions;
+var _elm_lang$html$Html_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
+var _elm_lang$html$Html_Events$onFocus = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'focus',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onBlur = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'blur',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
+	_elm_lang$html$Html_Events$defaultOptions,
+	{preventDefault: true});
+var _elm_lang$html$Html_Events$onSubmit = function (msg) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'submit',
+		_elm_lang$html$Html_Events$onSubmitOptions,
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onCheck = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetChecked));
+};
+var _elm_lang$html$Html_Events$onInput = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'input',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
+};
+var _elm_lang$html$Html_Events$onMouseOut = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseout',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseOver = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseover',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseLeave = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseleave',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseEnter = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseenter',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseUp = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseup',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseDown = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mousedown',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onDoubleClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'dblclick',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'click',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$Options = F2(
+	function (a, b) {
+		return {stopPropagation: a, preventDefault: b};
+	});
+
 //import Dict, List, Maybe, Native.Scheduler //
 
 var _evancz$elm_http$Native_Http = function() {
@@ -8761,10 +8862,30 @@ var _nunull$ng$Models$Item = F6(
 	function (a, b, c, d, e, f) {
 		return {name: a, url: b, commentsUrl: c, date: d, source: e, channel: f};
 	});
-var _nunull$ng$Models$Model = F4(
-	function (a, b, c, d) {
-		return {items: a, message: b, loading: c, now: d};
+var _nunull$ng$Models$Model = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {sources: a, items: b, message: c, loading: d, sourceInput: e, sourceInputChannel: f, now: g, dialogs: h};
 	});
+var _nunull$ng$Models$Dialog = F2(
+	function (a, b) {
+		return {title: a, content: b};
+	});
+var _nunull$ng$Models$Reddit = function (a) {
+	return {ctor: 'Reddit', _0: a};
+};
+var _nunull$ng$Models$SourceRemove = function (a) {
+	return {ctor: 'SourceRemove', _0: a};
+};
+var _nunull$ng$Models$SourceAdd = {ctor: 'SourceAdd'};
+var _nunull$ng$Models$SourceInputChangeChannel = function (a) {
+	return {ctor: 'SourceInputChangeChannel', _0: a};
+};
+var _nunull$ng$Models$SourceInputChange = function (a) {
+	return {ctor: 'SourceInputChange', _0: a};
+};
+var _nunull$ng$Models$HideDialog = {ctor: 'HideDialog'};
+var _nunull$ng$Models$ShowAbout = {ctor: 'ShowAbout'};
+var _nunull$ng$Models$ShowManage = {ctor: 'ShowManage'};
 var _nunull$ng$Models$DateSucceed = function (a) {
 	return {ctor: 'DateSucceed', _0: a};
 };
@@ -8773,6 +8894,158 @@ var _nunull$ng$Models$FetchFail = function (a) {
 };
 var _nunull$ng$Models$FetchSucceed = function (a) {
 	return {ctor: 'FetchSucceed', _0: a};
+};
+
+var _nunull$ng$Dialog$viewSource = function (source) {
+	var _p0 = source;
+	return A2(
+		_elm_lang$html$Html$li,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(
+						_nunull$ng$Models$SourceRemove(source))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Remove')
+					])),
+				A2(
+				_elm_lang$html$Html$span,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Reddit ',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'(',
+								A2(_elm_lang$core$Basics_ops['++'], _p0._0, ')'))))
+					]))
+			]));
+};
+var _nunull$ng$Dialog$manageDialog = function (model) {
+	return {
+		title: 'Manage',
+		content: A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$ul,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					A2(_elm_lang$core$List$map, _nunull$ng$Dialog$viewSource, model.sources)),
+					A2(
+					_elm_lang$html$Html$section,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$button,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Events$onClick(_nunull$ng$Models$SourceAdd)
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('Add')
+								])),
+							A2(
+							_elm_lang$html$Html$select,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									A2(
+									_elm_lang$html$Html_Events$on,
+									'change',
+									A2(
+										_elm_lang$core$Json_Decode$map,
+										_nunull$ng$Models$SourceInputChange,
+										A2(
+											_elm_lang$core$Json_Decode$at,
+											_elm_lang$core$Native_List.fromArray(
+												['target', 'value']),
+											_elm_lang$core$Json_Decode$string)))
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									A2(
+									_elm_lang$html$Html$option,
+									_elm_lang$core$Native_List.fromArray(
+										[]),
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_elm_lang$html$Html$text('Reddit')
+										]))
+								])),
+							A2(
+							_elm_lang$html$Html$input,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$placeholder('Channel'),
+									_elm_lang$html$Html_Events$onInput(_nunull$ng$Models$SourceInputChangeChannel)
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[]))
+						]))
+				]))
+	};
+};
+var _nunull$ng$Dialog$view = function (dialog) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('dialog')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$header,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$h3,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(dialog.title)
+							]))
+					])),
+				dialog.content,
+				A2(
+				_elm_lang$html$Html$footer,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$button,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Events$onClick(_nunull$ng$Models$HideDialog),
+								_elm_lang$html$Html_Attributes$class('primary')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('OK')
+							]))
+					]))
+			]));
 };
 
 var _nunull$ng$Network$getErrorMessage = function (error) {
@@ -8825,13 +9098,22 @@ var _nunull$ng$Network$fetchReddit = function (sub) {
 						A2(_elm_lang$core$Json_Decode_ops[':='], 'permalink', _elm_lang$core$Json_Decode$string),
 						A2(_elm_lang$core$Json_Decode_ops[':='], 'created_utc', _elm_lang$core$Json_Decode$float))))));
 };
-var _nunull$ng$Network$fetchAll = _elm_lang$core$Platform_Cmd$batch(
-	_elm_lang$core$Native_List.fromArray(
-		[
-			_nunull$ng$Network$fetchReddit('haskell'),
-			_nunull$ng$Network$fetchReddit('elm'),
-			A3(_elm_lang$core$Task$perform, _nunull$ng$Models$DateSucceed, _nunull$ng$Models$DateSucceed, _elm_lang$core$Date$now)
-		]));
+var _nunull$ng$Network$fetchAll = function (_p1) {
+	return _elm_lang$core$Platform_Cmd$batch(
+		A2(
+			_elm_lang$core$List$append,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A3(_elm_lang$core$Task$perform, _nunull$ng$Models$DateSucceed, _nunull$ng$Models$DateSucceed, _elm_lang$core$Date$now)
+				]),
+			A2(
+				_elm_lang$core$List$map,
+				function (source) {
+					var _p2 = source;
+					return _nunull$ng$Network$fetchReddit(_p2._0);
+				},
+				_p1)));
+};
 
 var _nunull$ng$ListView$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
@@ -9053,6 +9335,19 @@ var _nunull$ng$ListView$view = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'dialog-container',
+							(_elm_lang$core$Native_Utils.cmp(
+								_elm_lang$core$List$length(model.dialogs),
+								0) > 0) ? ' active' : ''))
+					]),
+				A2(_elm_lang$core$List$map, _nunull$ng$Dialog$view, model.dialogs)),
+				A2(
 				_elm_lang$html$Html$header,
 				_elm_lang$core$Native_List.fromArray(
 					[]),
@@ -9072,6 +9367,7 @@ var _nunull$ng$ListView$view = function (model) {
 						_elm_lang$html$Html$button,
 						_elm_lang$core$Native_List.fromArray(
 							[
+								_elm_lang$html$Html_Events$onClick(_nunull$ng$Models$ShowManage),
 								_elm_lang$html$Html_Attributes$class('primary')
 							]),
 						_elm_lang$core$Native_List.fromArray(
@@ -9081,7 +9377,9 @@ var _nunull$ng$ListView$view = function (model) {
 						A2(
 						_elm_lang$html$Html$button,
 						_elm_lang$core$Native_List.fromArray(
-							[]),
+							[
+								_elm_lang$html$Html_Events$onClick(_nunull$ng$Models$ShowAbout)
+							]),
 						_elm_lang$core$Native_List.fromArray(
 							[
 								_elm_lang$html$Html$text('About')
@@ -9149,7 +9447,7 @@ var _nunull$ng$ListView$update = F2(
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			default:
+			case 'DateSucceed':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -9159,19 +9457,138 @@ var _nunull$ng$ListView$update = F2(
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			case 'ShowManage':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							dialogs: A2(
+								_elm_lang$core$Basics_ops['++'],
+								model.dialogs,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_nunull$ng$Dialog$manageDialog(model)
+									]))
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ShowAbout':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							dialogs: A2(
+								_elm_lang$core$Basics_ops['++'],
+								model.dialogs,
+								_elm_lang$core$Native_List.fromArray(
+									[]))
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'HideDialog':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							dialogs: _elm_lang$core$List$reverse(
+								A2(
+									_elm_lang$core$Maybe$withDefault,
+									_elm_lang$core$Native_List.fromArray(
+										[]),
+									_elm_lang$core$List$tail(
+										_elm_lang$core$List$reverse(model.dialogs)))),
+							items: _elm_lang$core$Native_List.fromArray(
+								[])
+						}),
+					_1: _nunull$ng$Network$fetchAll(model.sources)
+				};
+			case 'SourceInputChange':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{sourceInput: _p4._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SourceInputChangeChannel':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{sourceInputChannel: _p4._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SourceAdd':
+				var source = function () {
+					var _p5 = model.sourceInput;
+					if (_p5 === 'Reddit') {
+						return _elm_lang$core$Maybe$Just(
+							_nunull$ng$Models$Reddit(model.sourceInputChannel));
+					} else {
+						return _elm_lang$core$Maybe$Nothing;
+					}
+				}();
+				var _p6 = source;
+				if (_p6.ctor === 'Just') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								sources: A2(
+									_elm_lang$core$Basics_ops['++'],
+									model.sources,
+									_elm_lang$core$Native_List.fromArray(
+										[_p6._0]))
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							sources: A2(
+								_elm_lang$core$List$filter,
+								function (source$) {
+									return !_elm_lang$core$Native_Utils.eq(source$, _p4._0);
+								},
+								model.sources)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
-var _nunull$ng$ListView$init = {
-	ctor: '_Tuple2',
-	_0: {
+var _nunull$ng$ListView$init = function () {
+	var model = {
 		items: _elm_lang$core$Native_List.fromArray(
 			[]),
 		message: '',
 		loading: true,
-		now: _elm_lang$core$Maybe$Nothing
-	},
-	_1: _nunull$ng$Network$fetchAll
-};
+		now: _elm_lang$core$Maybe$Nothing,
+		sourceInput: 'Reddit',
+		sourceInputChannel: '',
+		dialogs: _elm_lang$core$Native_List.fromArray(
+			[]),
+		sources: _elm_lang$core$Native_List.fromArray(
+			[
+				_nunull$ng$Models$Reddit('haskell'),
+				_nunull$ng$Models$Reddit('elm')
+			])
+	};
+	return {
+		ctor: '_Tuple2',
+		_0: model,
+		_1: _nunull$ng$Network$fetchAll(model.sources)
+	};
+}();
 
 var _nunull$ng$NewsAggregator$main = {
 	main: _elm_lang$html$Html_App$program(

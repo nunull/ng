@@ -13,12 +13,14 @@ import Models exposing (..)
 fetch : String -> Decoder (List Item) -> Cmd Msg
 fetch url decode = perform FetchFail FetchSucceed <| get decode url
 
-fetchAll : Cmd Msg
-fetchAll = batch
-  [ fetchReddit "haskell"
-  , fetchReddit "elm"
-  , perform DateSucceed DateSucceed Date.now
-  ]
+fetchAll : List Source -> Cmd Msg
+fetchAll =
+  batch
+  << List.append [ perform DateSucceed DateSucceed Date.now ]
+  << List.map (\source ->
+       case source of
+         Reddit channel -> fetchReddit channel
+     )
 
 fetchReddit : String -> Cmd Msg
 fetchReddit sub = fetch ("https://www.reddit.com/r/" ++ sub ++ ".json")

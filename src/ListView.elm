@@ -2,6 +2,7 @@ module ListView exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 import Maybe exposing (..)
 import String exposing (..)
 import List exposing (..)
@@ -13,11 +14,24 @@ import Array
 
 import Network exposing (..)
 import Models exposing (..)
+import Dialog exposing (..)
 
 init : (Model, Cmd Msg)
 init =
-  ( { items = [], message = "", loading = True, now = Nothing }
-  , fetchAll
+  let
+    model =
+      { items = []
+      , message = ""
+      , loading = True
+      , now = Nothing
+      , sourceInput = "Reddit"
+      , sourceInputChannel = ""
+      , dialogs = []
+      , sources = [ Reddit "haskell", Reddit "elm" ]
+      }
+  in
+  ( model
+  , fetchAll model.sources
   )
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -37,14 +51,62 @@ update msg model = case msg of
     ( { model | now = Just date }
     , Cmd.none
     )
+  ShowManage ->
+    ( { model | dialogs = model.dialogs ++ [ manageDialog model ] }
+    , Cmd.none
+    )
+  ShowAbout ->
+    ( { model | dialogs = model.dialogs ++ [ ] }
+    , Cmd.none
+    )
+  HideDialog ->
+    ( { model
+      | dialogs =
+          List.reverse
+          <| Maybe.withDefault []
+          <| tail
+          <| List.reverse model.dialogs
+      , items = []
+      }
+    , fetchAll model.sources
+    )
+  SourceInputChange name ->
+    ( { model | sourceInput = name }
+    , Cmd.none
+    )
+  SourceInputChangeChannel channel ->
+    ( { model | sourceInputChannel = channel }
+    , Cmd.none
+    )
+  SourceAdd ->
+    let
+      source = case model.sourceInput of
+        "Reddit" -> Just <| Reddit model.sourceInputChannel
+        _ -> Nothing
+    in
+    case source of
+      Just source ->
+        ( { model | sources = model.sources ++ [ source ] }
+        , Cmd.none
+        )
+      Nothing -> ( model, Cmd.none )
+  SourceRemove source ->
+    ( { model | sources = List.filter (\source' -> source' /= source) model.sources }
+    , Cmd.none
+    )
 
 view : Model -> Html Msg
 view model =
   div [ class "container" ]
-  [ header []
+  [ div
+    [ class <| "dialog-container"
+      ++ (if List.length model.dialogs > 0 then " active" else "")
+    ]
+    <| List.map Dialog.view model.dialogs
+  ,  header []
     [ h1 [ class "logo" ] [ text "N" ]
-    , button [ class "primary" ] [ text "Manage" ]
-    , button [] [ text "About" ]
+    , button [ onClick ShowManage, class "primary" ] [ text "Manage" ]
+    , button [ onClick ShowAbout] [ text "About" ]
     ]
   , div [ class "loading-indicator", hidden <| not model.loading ] []
   , span [] [ text model.message ]
