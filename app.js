@@ -8896,6 +8896,78 @@ var _nunull$ng$Models$FetchSucceed = function (a) {
 	return {ctor: 'FetchSucceed', _0: a};
 };
 
+var _nunull$ng$Dialog$about = '\nThis is a simple news aggregator, which works entirely client side and doesn\'t\nneed authentication.\n';
+var _nunull$ng$Dialog$aboutDialog = function (model) {
+	return {
+		title: 'About',
+		content: A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$p,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text(_nunull$ng$Dialog$about)
+						])),
+					A2(
+					_elm_lang$html$Html$section,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$b,
+							_elm_lang$core$Native_List.fromArray(
+								[]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('Repository: ')
+								])),
+							A2(
+							_elm_lang$html$Html$a,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$href('https://github.com/nunull/ng'),
+									_elm_lang$html$Html_Attributes$target('_blank')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('github.com/nunull/ng')
+								])),
+							A2(
+							_elm_lang$html$Html$br,
+							_elm_lang$core$Native_List.fromArray(
+								[]),
+							_elm_lang$core$Native_List.fromArray(
+								[])),
+							A2(
+							_elm_lang$html$Html$b,
+							_elm_lang$core$Native_List.fromArray(
+								[]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('Bugtracker: ')
+								])),
+							A2(
+							_elm_lang$html$Html$a,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$href('https://github.com/nunull/ng/issues'),
+									_elm_lang$html$Html_Attributes$target('_blank')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('github.com/nunull/ng/issues')
+								]))
+						]))
+				]))
+	};
+};
 var _nunull$ng$Dialog$viewSource = function (source) {
 	var _p0 = source;
 	return A2(
@@ -9483,7 +9555,9 @@ var _nunull$ng$ListView$update = F2(
 								_elm_lang$core$Basics_ops['++'],
 								model.dialogs,
 								_elm_lang$core$Native_List.fromArray(
-									[]))
+									[
+										_nunull$ng$Dialog$aboutDialog(model)
+									]))
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};

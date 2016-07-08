@@ -56,7 +56,7 @@ update msg model = case msg of
     , Cmd.none
     )
   ShowAbout ->
-    ( { model | dialogs = model.dialogs ++ [ ] }
+    ( { model | dialogs = model.dialogs ++ [ aboutDialog model ] }
     , Cmd.none
     )
   HideDialog ->
@@ -91,7 +91,9 @@ update msg model = case msg of
         )
       Nothing -> ( model, Cmd.none )
   SourceRemove source ->
-    ( { model | sources = List.filter (\source' -> source' /= source) model.sources }
+    ( { model
+      | sources = List.filter (\source' -> source' /= source) model.sources
+      }
     , Cmd.none
     )
 
@@ -169,8 +171,10 @@ displayDate cur date =
   case cur of
     Just cur ->
       let
-        fs    = [  year, monthToInt << month,   day,   hour,   minute,   second ]
-        names = [ "year",             "month", "day", "hour", "minute", "second" ]
+        fs    =
+          [  year, monthToInt << month,   day,   hour,   minute,   second ]
+        names =
+          [ "year",             "month", "day", "hour", "minute", "second" ]
         result
           = Array.get 0 <| Array.fromList
          <| List.map snd <| List.filter (\pair -> fst pair /= 0)
